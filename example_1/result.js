@@ -1,9 +1,9 @@
-const play = require('./play.js');
-const invoice = require('./invoices.js');
+const plays = require('./play.js');
+const invoices = require('./invoices.js');
 
 
-console.log(play)
-console.log(invoice)
+console.log(plays)
+console.log(invoices)
 function statement (invoice, plays) {
     let totalAmount = 0;
     let volumeCredits = 0;
@@ -12,29 +12,11 @@ function statement (invoice, plays) {
                           { style: "currency", currency: "USD",
                             minimumFractionDigits: 2 }).format;
   
-    for (let perf of invoice[0].performances) {
+    for (let perf of invoice.performances) {
       const play = plays[perf.playID];
-      let thisAmount = 0;
-  
-      switch (play.type) {
-      case "tragedy":
-        thisAmount = 40000;
-        if (perf.audience > 30) {
-          thisAmount += 1000 * (perf.audience - 30);
-        }
-        break;
-      case "comedy":
-        thisAmount = 30000;
-        if (perf.audience > 20) {
-          thisAmount += 10000 + 500 * (perf.audience - 20);
-        }
-        thisAmount += 300 * perf.audience;
-        break;
-      default:
-          throw new Error(`unknown type: ${play.type}`);
-      }
-  
-      // add volume credits
+      let thisAmount = amountFor(play, perf);
+
+      // add volume credit
       volumeCredits += Math.max(perf.audience - 30, 0);
       // add extra credit for every ten comedy attendees
       if ("comedy" === play.type) volumeCredits += Math.floor(perf.audience / 5);
@@ -48,4 +30,28 @@ function statement (invoice, plays) {
     return result;
   }
 
-  console.log(statement(invoice,play));
+  console.log(statement(invoices[0],plays));
+
+//첫번째 refactoring 함수 amountFor 추출
+function amountFor(play, perf) {
+  //두번째 refactoring 변수 이름 변경
+  let result = 0;
+  switch (play.type) {
+    case "tragedy":
+      result = 40000;
+      if (perf.audience > 30) {
+        result += 1000 * (perf.audience - 30);
+      }
+      break;
+    case "comedy":
+      result = 30000;
+      if (perf.audience > 20) {
+        result += 10000 + 500 * (perf.audience - 20);
+      }
+      result += 300 * perf.audience;
+      break;
+    default:
+      throw new Error(`unknown type: ${play.type}`);
+  }
+  return result;
+}
