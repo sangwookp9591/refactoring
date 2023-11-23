@@ -1,6 +1,15 @@
 import invoices from './invoices.js';
 import plays from './plays.js';
 
+/**
+ *
+ *
+ * @param {*} invoice
+ * @param {*} plays
+ * @returns
+ */
+//추출 작업 전에 항상 지역 변수부터 제거
+
 function statement(invoice, plays) {
     let totalAmount = 0;
     let volumeCredits = 0;
@@ -30,12 +39,12 @@ function statement(invoice, plays) {
                 throw new Error(`unknown type: ${play.type}`);
         }
 
-        // add volume credits
+        // add volume credits 포인트 적립
         volumeCredits += Math.max(perf.audience - 30, 0);
         // add extra credit for every ten comedy attendees
         if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
 
-        // print line for this order
+        // print line for this order 청구 내역 출력
         result += `  ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
         totalAmount += thisAmount;
     }
