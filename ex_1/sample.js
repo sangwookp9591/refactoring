@@ -26,7 +26,7 @@ function statement(invoice, plays) {
          */
 
         //변수를 인라인하여 매개 변수를 제거
-        let thisAmount = amountFor(perf, play);
+        let thisAmount = amountFor(perf);
 
         // add volume credits 포인트 적립
         volumeCredits += Math.max(perf.audience - 30, 0);
@@ -42,10 +42,10 @@ function statement(invoice, plays) {
     return result;
 }
 
-function amountFor(aPerformance, play) {
+function amountFor(aPerformance) {
     let result = 0;
 
-    switch (play.type) {
+    switch (playFor(aPerformance).type) {
         case 'tragedy':
             result = 40000;
             if (aPerformance.audience > 30) {
@@ -60,7 +60,7 @@ function amountFor(aPerformance, play) {
             result += 300 * aPerformance.audience;
             break;
         default:
-            throw new Error(`unknown type: ${play.type}`);
+            throw new Error(`unknown type: ${playFor(aPerformance).type}`);
     }
     return thisAmount; //함수 안에서 값이 변경되는 변수 반환.
 }
