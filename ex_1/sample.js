@@ -62,10 +62,12 @@ function amountFor(aPerformance) {
     return thisAmount; //함수 안에서 값이 변경되는 변수 반환.
 }
 
+//플레이어 추출함수.
 function playFor(aPerformance) {
     return plays[aPerformance.playID];
 }
 
+//volume creadits 구하는 함수
 function volumeCreditsFor(perf) {
     let result = 0;
     result += Math.max(perf.audience - 30, 0);
@@ -74,6 +76,7 @@ function volumeCreditsFor(perf) {
     return result;
 }
 
+//usd 반환 Format 함수
 function usd(aNumber) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).usd(
         aNumber / 100
