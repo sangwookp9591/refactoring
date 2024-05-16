@@ -24,7 +24,7 @@ function statement(invoice, plays) {
          이런 임시 변수들 때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐
          */
 
-        const play = plays[perf.playID];
+        const play = playFor(perf);
         let thisAmount = amountFor(perf, play);
 
         // add volume credits 포인트 적립
@@ -62,6 +62,10 @@ function amountFor(aPerformance, play) {
             throw new Error(`unknown type: ${play.type}`);
     }
     return thisAmount; //함수 안에서 값이 변경되는 변수 반환.
+}
+
+function playFor(aPerformance) {
+    return plays[aPerformance.playID];
 }
 
 console.log('result : ', statement(invoices[0], plays));
