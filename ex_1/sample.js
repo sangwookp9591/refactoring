@@ -12,12 +12,12 @@ import plays from './plays.js';
 
 function statement(invoice, plays) {
     function totalVolumeCredits() {
-        let volumeCredits = 0;
+        let totalAmount = 0;
         for (let perf of invoice.performances) {
-            volumeCredits += volumeCreditsFor(perf);
+            totalAmount += volumeCreditsFor(perf);
         }
 
-        return volumeCredits;
+        return totalAmount;
     }
 
     let totalAmount = 0;
