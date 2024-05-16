@@ -11,6 +11,15 @@ import plays from './plays.js';
 //추출 작업 전에 항상 지역 변수부터 제거
 
 function statement(invoice, plays) {
+    function totalVolumeCredits() {
+        let volumeCredits = 0;
+        for (let perf of invoice.performances) {
+            volumeCredits += volumeCreditsFor(perf);
+        }
+
+        return volumeCredits;
+    }
+
     let totalAmount = 0;
 
     let result = `Statement for ${invoice.customer}\n`;
@@ -21,15 +30,7 @@ function statement(invoice, plays) {
         totalAmount += amountFor(perf);
     }
 
-    let volumeCredits = 0;
-
-    for (let perf of invoice.performances) {
-        // add volume credits 포인트 적립
-        /*반복문을 한 바퀴 돌 때마다 값을 누적하기 때문에 리팩터링하기가 더 까다롭다.
-        반복문 쪼개기 사용.*/
-        /**값을 누적 시키는 부분은 분리 */
-        volumeCredits += volumeCreditsFor(perf);
-    }
+    let volumeCredits = totalVolumeCredits();
     result += `Amount owed is ${usd(totalAmount / 100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
     return result;
@@ -75,4 +76,5 @@ function usd(aNumber) {
         aNumber / 100
     );
 }
+
 console.log('result : ', statement(invoices[0], plays));
