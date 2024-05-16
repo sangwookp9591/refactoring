@@ -18,6 +18,12 @@ function statement(invoice, plays) {
         .format;
 
     for (let perf of invoice.performances) {
+        /*perf는 loop돌면서 변하는값
+        play는 변하지 않는 값
+        -> 변하지않는 값은 최대한 함수에서제거
+         이런 임시 변수들 때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐
+         */
+
         const play = plays[perf.playID];
         let thisAmount = amountFor(perf, play);
 
