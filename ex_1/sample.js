@@ -82,4 +82,5 @@ function statement(invoice, plays) {
     }
 }
 
+//
 console.log('result : ', statement(invoices[0], plays));
