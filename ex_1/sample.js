@@ -17,21 +17,12 @@ function statement(invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`;
 
     for (let perf of invoice.performances) {
-        /*perf는 loop돌면서 변하는값
-        play는 변하지 않는 값
-        -> 변하지않는 값은 최대한 함수에서제거
-         이런 임시 변수들 때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐
-         */
-
-        //변수를 인라인하여 매개 변수를 제거
-        let thisAmount = amountFor(perf);
-
         // add volume credits 포인트 적립
         volumeCredits += volumeCreditsFor(perf);
 
         // print line for this order 청구 내역 출력
-        result += `  ${playFor(perf).name}: ${usd(thisAmount / 100)} (${perf.audience} seats)\n`;
-        totalAmount += thisAmount;
+        result += `  ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
+        totalAmount += amountFor(perf);
     }
     result += `Amount owed is ${usd(totalAmount / 100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
