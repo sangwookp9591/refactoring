@@ -17,12 +17,17 @@ function statement(invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`;
 
     for (let perf of invoice.performances) {
-        // add volume credits 포인트 적립
-        volumeCredits += volumeCreditsFor(perf);
-
         // print line for this order 청구 내역 출력
         result += `  ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
         totalAmount += amountFor(perf);
+    }
+
+    for (let perf of invoice.performances) {
+        // add volume credits 포인트 적립
+        /*반복문을 한 바퀴 돌 때마다 값을 누적하기 때문에 리팩터링하기가 더 까다롭다.
+        반복문 쪼개기 사용.*/
+        /**값을 누적 시키는 부분은 분리 */
+        volumeCredits += volumeCreditsFor(perf);
     }
     result += `Amount owed is ${usd(totalAmount / 100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
