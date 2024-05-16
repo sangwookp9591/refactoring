@@ -24,16 +24,16 @@ function statement(invoice, plays) {
          이런 임시 변수들 때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐
          */
 
-        const play = playFor(perf);
+        //변수를 인라인하여 매개 변수를 제거
         let thisAmount = amountFor(perf, play);
 
         // add volume credits 포인트 적립
         volumeCredits += Math.max(perf.audience - 30, 0);
         // add extra credit for every ten comedy attendees
-        if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
+        if ('comedy' === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
 
         // print line for this order 청구 내역 출력
-        result += `  ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
+        result += `  ${playFor(perf).name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
         totalAmount += thisAmount;
     }
     result += `Amount owed is ${format(totalAmount / 100)}\n`;
