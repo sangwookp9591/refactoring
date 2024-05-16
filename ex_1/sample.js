@@ -29,9 +29,7 @@ function statement(invoice, plays) {
         let thisAmount = amountFor(perf);
 
         // add volume credits 포인트 적립
-        volumeCredits += Math.max(perf.audience - 30, 0);
-        // add extra credit for every ten comedy attendees
-        if ('comedy' === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
+        volumeCredits += volumeCreditsFor(perf);
 
         // print line for this order 청구 내역 출력
         result += `  ${playFor(perf).name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
