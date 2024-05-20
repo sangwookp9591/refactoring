@@ -16,6 +16,10 @@ function statement(invoice, plays) {
     //중간 데이터 구조를 인수로 전달
     const statementData = {};
 
+    //이렇게 중간 데이터 구조를 인수로 전달하면
+    //계산 관련 코드는 statement에 포함
+
+    // data 매개 변수로 전달된 데이터만 처리하게 만들수 있다.
     return renderPlainText(statementData, invoice, plays); // 중간 데이터 구조를 인수로 전달
 }
 
