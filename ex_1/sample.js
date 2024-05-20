@@ -10,7 +10,12 @@ import plays from './plays.js';
  */
 //이렇게하면 논리적으로 요소를 분리했지만
 //텍스트 버전과 HTML버전 모두가 똑같은 계싼함수들을 사용하게 만들기 어렵다.
+
 function statement(invoice, plays) {
+    renderPlainText(invoice, plays);
+}
+
+function renderPlainText(invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`;
 
     for (let perf of invoice.performances) {
@@ -81,5 +86,4 @@ function statement(invoice, plays) {
         );
     }
 }
-
 console.log('result : ', statement(invoices[0], plays));
