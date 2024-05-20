@@ -20,13 +20,16 @@ function statement(invoice, plays) {
     //계산 관련 코드는 statement에 포함
 
     // data 매개 변수로 전달된 데이터만 처리하게 만들수 있다.
+
+    //고객 데이터를 중간 데이터로 옮김.
+    statementData.customer = invoice.customer;
     return renderPlainText(statementData, invoice, plays); // 중간 데이터 구조를 인수로 전달
 }
 
 function renderPlainText(data, invoice, plays) {
     // 중간 데이터 구조를 인수로 전달
 
-    let result = `Statement for ${invoice.customer}\n`;
+    let result = `Statement for ${data.customer}\n`; //고객 데이터를 중간 데이터로부터 얻음
 
     for (let perf of invoice.performances) {
         // print line for this order 청구 내역 출력
