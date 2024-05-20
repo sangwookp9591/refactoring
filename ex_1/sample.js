@@ -23,6 +23,8 @@ function statement(invoice, plays) {
 
     //고객 데이터를 중간 데이터로 옮김.
     statementData.customer = invoice.customer;
+    // 공연 데이터를 중간 데이터로 옮김.
+    statementData.performances = invoice.performances;
     return renderPlainText(statementData, invoice, plays); // 중간 데이터 구조를 인수로 전달
 }
 
@@ -31,7 +33,7 @@ function renderPlainText(data, invoice, plays) {
 
     let result = `Statement for ${data.customer}\n`; //고객 데이터를 중간 데이터로부터 얻음
 
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
         // print line for this order 청구 내역 출력
         result += `  ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
     }
