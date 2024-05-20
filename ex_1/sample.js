@@ -12,10 +12,16 @@ import plays from './plays.js';
 //텍스트 버전과 HTML버전 모두가 똑같은 계싼함수들을 사용하게 만들기 어렵다.
 
 function statement(invoice, plays) {
-    renderPlainText(invoice, plays);
+    //단계 쪼개기
+    //중간 데이터 구조를 인수로 전달
+    const statementData = {};
+
+    return renderPlainText(statementData, invoice, plays); // 중간 데이터 구조를 인수로 전달
 }
 
-function renderPlainText(invoice, plays) {
+function renderPlainText(data, invoice, plays) {
+    // 중간 데이터 구조를 인수로 전달
+
     let result = `Statement for ${invoice.customer}\n`;
 
     for (let perf of invoice.performances) {
