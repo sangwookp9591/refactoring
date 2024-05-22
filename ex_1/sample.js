@@ -29,20 +29,12 @@ function statement(invoice, plays) {
     statementData.totalVolumeCredits = totalVolumeCredits(statementData);
     return renderPlainText(statementData, plays); // 중간 데이터 구조를 인수로 전달
 
-    function totalAmount() {
-        let totalAmount = 0;
-        for (let perf of data.performances) {
-            totalAmount += perf.amount;
-        }
+    function totalAmount(data) {
+        return data.performances.reduce((total, p) => total + p.amount, 0);
     }
 
-    function totalVolumeCredits() {
-        let totalAmount = 0;
-        for (let perf of data.performances) {
-            totalAmount += perf.volumeCredits;
-        }
-
-        return totalAmount;
+    function totalVolumeCredits(data) {
+        return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
     }
 
     function enrichPerformance(aPerformance) {
