@@ -25,7 +25,25 @@ function statement(invoice, plays) {
     statementData.customer = invoice.customer;
     // 공연 데이터를 중간 데이터로 옮김.
     statementData.performances = invoice.performances.map(enrichPerformance);
+    statementData.totalAmount = totalAmount(statementData);
+    statementData.totalVolumeCredits = totalVolumeCredits(statementData);
     return renderPlainText(statementData, plays); // 중간 데이터 구조를 인수로 전달
+
+    function totalAmount() {
+        let totalAmount = 0;
+        for (let perf of data.performances) {
+            totalAmount += perf.amount;
+        }
+    }
+
+    function totalVolumeCredits() {
+        let totalAmount = 0;
+        for (let perf of data.performances) {
+            totalAmount += perf.volumeCredits;
+        }
+
+        return totalAmount;
+    }
 
     function enrichPerformance(aPerformance) {
         const result = Object.assign({}, aPerformance); //얕은 복사 수행
@@ -83,25 +101,9 @@ function renderPlainText(data, plays) {
         result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
     }
 
-    result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
-    result += `You earned ${totalVolumeCredits()} credits\n`;
+    result += `Amount owed is ${usd(data.totalAmount)}\n`;
+    result += `You earned ${data.totalVolumeCredits}점\n`;
     return result;
-
-    function totalVolumeCredits() {
-        let totalAmount = 0;
-        for (let perf of data.performances) {
-            totalAmount += perf.volumeCredits;
-        }
-
-        return totalAmount;
-    }
-
-    function totalAmount() {
-        let totalAmount = 0;
-        for (let perf of data.performances) {
-            totalAmount += perf.amount;
-        }
-    }
 
     //usd 반환 Format 함수
     function usd(aNumber) {
