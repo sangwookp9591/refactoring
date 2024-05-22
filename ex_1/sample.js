@@ -12,6 +12,11 @@ import plays from './plays.js';
 //텍스트 버전과 HTML버전 모두가 똑같은 계싼함수들을 사용하게 만들기 어렵다.
 
 function statement(invoice, plays) {
+    return renderPlainText(createStatementData(invoice, plays));
+}
+
+// statement 에 필요한 데이터 처리에 해당하는 코드를 모두 별도 함수로 추출
+function createStatementData(invoice, plays) {
     //단계 쪼개기
     //중간 데이터 구조를 인수로 전달
     const statementData = {};
