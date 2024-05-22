@@ -32,6 +32,7 @@ function statement(invoice, plays) {
         //첫 레벨만 복사해서 가져옴.
         result.play = playFor(result);
         result.amount = amountFor(result);
+        result.volumeCredits = volumeCreditsFor(result);
         return result;
     }
 
@@ -39,21 +40,7 @@ function statement(invoice, plays) {
     function playFor(aPerformance) {
         return plays[aPerformance.playID];
     }
-}
 
-function renderPlainText(data, plays) {
-    // 중간 데이터 구조를 인수로 전달
-
-    let result = `Statement for ${data.customer}\n`; //고객 데이터를 중간 데이터로부터 얻음
-
-    for (let perf of data.performances) {
-        // print line for this order 청구 내역 출력
-        result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
-    }
-
-    result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
-    result += `You earned ${totalVolumeCredits()} credits\n`;
-    return result;
     //volume creadits 구하는 함수
     function volumeCreditsFor(aPerformance) {
         let result = 0;
@@ -84,11 +71,26 @@ function renderPlainText(data, plays) {
         }
         return result; //함수 안에서 값이 변경되는 변수 반환.
     }
+}
+
+function renderPlainText(data, plays) {
+    // 중간 데이터 구조를 인수로 전달
+
+    let result = `Statement for ${data.customer}\n`; //고객 데이터를 중간 데이터로부터 얻음
+
+    for (let perf of data.performances) {
+        // print line for this order 청구 내역 출력
+        result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
+    }
+
+    result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
+    result += `You earned ${totalVolumeCredits()} credits\n`;
+    return result;
 
     function totalVolumeCredits() {
         let totalAmount = 0;
         for (let perf of data.performances) {
-            totalAmount += volumeCreditsFor(perf);
+            totalAmount += perf.volumeCredits;
         }
 
         return totalAmount;
