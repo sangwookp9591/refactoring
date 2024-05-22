@@ -5,26 +5,7 @@ class PerformanceCalculator {
     }
 
     get amount() {
-        let result = 0;
-
-        switch (this.play.type) {
-            case 'tragedy':
-                result = 40000;
-                if (this.performance.audience > 30) {
-                    result += 1000 * (this.performance.audience - 30);
-                }
-                break;
-            case 'comedy':
-                result = 30000;
-                if (this.performance.audience > 20) {
-                    result += 10000 + 500 * (this.performance.audience - 20);
-                }
-                result += 300 * this.performance.audience;
-                break;
-            default:
-                throw new Error(`unknown type: ${this.play.type}`);
-        }
-        return result; //함수 안에서 값이 변경되는 변수 반환.
+        throw new Error('서브클래스에서 처리하도록 설계되었습니다.');
     }
 
     get volumeCredits() {
@@ -36,14 +17,36 @@ class PerformanceCalculator {
     }
 }
 
-//다형성을 지원하게 변경
-//타입 코드 대신 서브클래스를 사용하도록 변경하는 것
-//딱맞는 서브클래스를 사용하려면 생성자 대신 함수를 호출하도록 변경
-//Js에서는 생성자가 서브클래스의 인스턴스를 반환할 수 없기 때문 -> 생성자를 팩터리 함수로 변경
 function createPerformanceCalculator(aPerformance, aPlay) {
-    return new PerformanceCalculator(aPerformance, aPlay);
+    switch (aPlay.type) {
+        case 'tragedy':
+            return new TragedyCalculator(aPerformance, aPlay);
+        case 'comedy':
+            return new ComedyCalculator(aPerformance, aPlay);
+        default:
+            throw new Error(`unknown type: ${aPlay.type}`);
+    }
 }
 
+class TragedyCalculator extends PerformanceCalculator {
+    get amount() {
+        let result = 4000;
+        if (this.performance.audience > 30) {
+            result += 1000 * (this.performance.audience - 30);
+        }
+        return result;
+    }
+}
+class ComedyCalculator extends PerformanceCalculator {
+    get amount() {
+        result = 30000;
+        if (this.performance.audience > 20) {
+            result += 10000 + 500 * (this.performance.audience - 20);
+        }
+        result += 300 * this.performance.audience;
+        return result;
+    }
+}
 function createStatementData(invoice, plays) {
     const statementData = {};
 
