@@ -31,6 +31,7 @@ function statement(invoice, plays) {
         const result = Object.assign({}, aPerformance); //얕은 복사 수행
         //첫 레벨만 복사해서 가져옴.
         result.play = playFor(result);
+        result.amount = amountFor(result);
         return result;
     }
 
@@ -47,7 +48,7 @@ function renderPlainText(data, plays) {
 
     for (let perf of data.performances) {
         // print line for this order 청구 내역 출력
-        result += `  ${result.play.name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
+        result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
     }
 
     result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
@@ -96,7 +97,7 @@ function renderPlainText(data, plays) {
     function totalAmount() {
         let totalAmount = 0;
         for (let perf of data.performances) {
-            totalAmount += amountFor(perf);
+            totalAmount += perf.amount;
         }
     }
 
