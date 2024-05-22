@@ -24,8 +24,20 @@ function statement(invoice, plays) {
     //고객 데이터를 중간 데이터로 옮김.
     statementData.customer = invoice.customer;
     // 공연 데이터를 중간 데이터로 옮김.
-    statementData.performances = invoice.performances;
+    statementData.performances = invoice.performances.map(enrichPerformance);
     return renderPlainText(statementData, plays); // 중간 데이터 구조를 인수로 전달
+
+    function enrichPerformance(aPerformance) {
+        const result = Object.assign({}, aPerformance); //얕은 복사 수행
+        //첫 레벨만 복사해서 가져옴.
+        result.play = playFor(result);
+        return result;
+    }
+
+    //플레이어 추출함수.
+    function playFor(aPerformance) {
+        return plays[aPerformance.playID];
+    }
 }
 
 function renderPlainText(data, plays) {
@@ -35,17 +47,24 @@ function renderPlainText(data, plays) {
 
     for (let perf of data.performances) {
         // print line for this order 청구 내역 출력
-        result += `  ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
+        result += `  ${result.play.name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`;
     }
 
     result += `Amount owed is ${usd(totalAmount() / 100)}\n`;
     result += `You earned ${totalVolumeCredits()} credits\n`;
     return result;
+    //volume creadits 구하는 함수
+    function volumeCreditsFor(aPerformance) {
+        let result = 0;
+        result += Math.max(aPerformance.audience - 30, 0);
+        if ('comedy' === aPerformance.play.type) result += Math.floor(perf.audience / 5);
 
+        return result;
+    }
     function amountFor(aPerformance) {
         let result = 0;
 
-        switch (playFor(aPerformance).type) {
+        switch (aPerformance.play.type) {
             case 'tragedy':
                 result = 40000;
                 if (aPerformance.audience > 30) {
@@ -60,9 +79,9 @@ function renderPlainText(data, plays) {
                 result += 300 * aPerformance.audience;
                 break;
             default:
-                throw new Error(`unknown type: ${playFor(aPerformance).type}`);
+                throw new Error(`unknown type: ${aPerformance.play.type}`);
         }
-        return thisAmount; //함수 안에서 값이 변경되는 변수 반환.
+        return result; //함수 안에서 값이 변경되는 변수 반환.
     }
 
     function totalVolumeCredits() {
@@ -79,19 +98,6 @@ function renderPlainText(data, plays) {
         for (let perf of data.performances) {
             totalAmount += amountFor(perf);
         }
-    }
-    //플레이어 추출함수.
-    function playFor(aPerformance) {
-        return plays[aPerformance.playID];
-    }
-
-    //volume creadits 구하는 함수
-    function volumeCreditsFor(perf) {
-        let result = 0;
-        result += Math.max(perf.audience - 30, 0);
-        if ('comedy' === playFor(perf).type) result += Math.floor(perf.audience / 5);
-
-        return result;
     }
 
     //usd 반환 Format 함수
