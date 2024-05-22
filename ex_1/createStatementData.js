@@ -36,6 +36,14 @@ class PerformanceCalculator {
     }
 }
 
+//다형성을 지원하게 변경
+//타입 코드 대신 서브클래스를 사용하도록 변경하는 것
+//딱맞는 서브클래스를 사용하려면 생성자 대신 함수를 호출하도록 변경
+//Js에서는 생성자가 서브클래스의 인스턴스를 반환할 수 없기 때문 -> 생성자를 팩터리 함수로 변경
+function createPerformanceCalculator(aPerformance, aPlay) {
+    return new PerformanceCalculator(aPerformance, aPlay);
+}
+
 function createStatementData(invoice, plays) {
     const statementData = {};
 
@@ -43,9 +51,10 @@ function createStatementData(invoice, plays) {
     statementData.performances = invoice.performances.map(enrichPerformance);
     statementData.totalAmount = totalAmount(statementData);
     statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-    return statementData; // 중간 데이터 구조를 인수로 전달
+    return statementData;
+    // 중간 데이터 구조를 인수로 전달
     function enrichPerformance(aPerformance) {
-        const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+        const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance); //얕은 복사 수행
         //첫 레벨만 복사해서 가져옴.
         result.play = calculator.play;
@@ -57,18 +66,6 @@ function createStatementData(invoice, plays) {
     //플레이어 추출함수.
     function playFor(aPerformance) {
         return plays[aPerformance.playID];
-    }
-
-    // function amountFor(aPerformance) {
-    //     return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
-    // }
-    //volume creadits 구하는 함수
-    function volumeCreditsFor(aPerformance) {
-        let result = 0;
-        result += Math.max(aPerformance.audience - 30, 0);
-        if ('comedy' === aPerformance.play.type) result += Math.floor(perf.audience / 5);
-
-        return result;
     }
 
     function totalAmount(data) {
