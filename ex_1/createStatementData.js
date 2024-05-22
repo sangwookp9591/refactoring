@@ -8,12 +8,9 @@ class PerformanceCalculator {
         throw new Error('서브클래스에서 처리하도록 설계되었습니다.');
     }
 
+    //공통적인 부부
     get volumeCredits() {
-        let result = 0;
-        result += Math.max(this.performance.audience - 30, 0);
-        if ('comedy' === this.play.type) result += Math.floor(this.performance.audience / 5);
-
-        return result;
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -45,6 +42,11 @@ class ComedyCalculator extends PerformanceCalculator {
         }
         result += 300 * this.performance.audience;
         return result;
+    }
+
+    //장르마다 달리지는 부분은 필요할 때 오버라이드하게 만드는 것이 좋다.
+    get volumeCredits() {
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
 }
 function createStatementData(invoice, plays) {
