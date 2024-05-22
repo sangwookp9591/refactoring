@@ -32,7 +32,7 @@ function createStatementData(invoice, plays) {
     statementData.performances = invoice.performances.map(enrichPerformance);
     statementData.totalAmount = totalAmount(statementData);
     statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-    return renderPlainText(statementData, plays); // 중간 데이터 구조를 인수로 전달
+    return statementData; // 중간 데이터 구조를 인수로 전달
 
     function totalAmount(data) {
         return data.performances.reduce((total, p) => total + p.amount, 0);
