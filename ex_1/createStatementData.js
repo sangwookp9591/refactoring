@@ -14,17 +14,6 @@ class PerformanceCalculator {
     }
 }
 
-function createPerformanceCalculator(aPerformance, aPlay) {
-    switch (aPlay.type) {
-        case 'tragedy':
-            return new TragedyCalculator(aPerformance, aPlay);
-        case 'comedy':
-            return new ComedyCalculator(aPerformance, aPlay);
-        default:
-            throw new Error(`unknown type: ${aPlay.type}`);
-    }
-}
-
 class TragedyCalculator extends PerformanceCalculator {
     get amount() {
         let result = 4000;
@@ -49,6 +38,18 @@ class ComedyCalculator extends PerformanceCalculator {
         return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
 }
+
+function createPerformanceCalculator(aPerformance, aPlay) {
+    switch (aPlay.type) {
+        case 'tragedy':
+            return new TragedyCalculator(aPerformance, aPlay);
+        case 'comedy':
+            return new ComedyCalculator(aPerformance, aPlay);
+        default:
+            throw new Error(`unknown type: ${aPlay.type}`);
+    }
+}
+
 function createStatementData(invoice, plays) {
     const statementData = {};
 
