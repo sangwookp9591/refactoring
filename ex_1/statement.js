@@ -29,13 +29,6 @@ function renderPlainText(data) {
     result += `Amount owed is ${usd(data.totalAmount)}\n`;
     result += `You earned ${data.totalVolumeCredits}점\n`;
     return result;
-
-    //usd 반환 Format 함수
-    function usd(aNumber) {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).usd(
-            aNumber / 100
-        );
-    }
 }
 
 function htmlStatement(invoice, plays) {
@@ -54,5 +47,12 @@ function renderHtml(data) {
     result += `<p>청구 금액 : ${usd(data.totalAmount)}</p>\n`;
     result += `<p>보너스 점수 : ${data.totalVolumeCredits}</p>\n`;
     return result;
+}
+
+//usd 반환 Format 함수
+function usd(aNumber) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).usd(
+        aNumber / 100
+    );
 }
 console.log('result : ', statement(invoices[0], plays));
